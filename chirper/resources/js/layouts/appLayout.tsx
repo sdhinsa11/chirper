@@ -5,6 +5,8 @@ export default function Layout({
     children, 
     title = "Chirper" 
 }: { 
+
+    // This means children can be valid react elements and a title needs to be a string
     children: ReactNode;
     title?: string;
 }) {

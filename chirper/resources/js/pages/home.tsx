@@ -1,6 +1,8 @@
 import Layout from "@/layouts/appLayout";
 import { Head } from "@inertiajs/react";
 
+
+// The children being passed to the layout component is the divs wrapped inside the "Layout" component because they pass children using a special built in prop (children)
 export default function Welcome() {
     return (
         <>
