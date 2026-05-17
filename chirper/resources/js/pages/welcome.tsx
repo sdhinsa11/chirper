@@ -2,9 +2,9 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { dashboard, login, register } from '@/routes';
 
 export default function Welcome({
-    canRegister = true,
+    canRegister = true, // this is a prop being passed from the route but defaulted to true
 }: {
-    canRegister?: boolean;
+    canRegister?: boolean; // prop
 }) {
     const { auth } = usePage().props;
 
@@ -29,6 +29,7 @@ export default function Welcome({
                                 >
                                     Log in
                                 </Link>
+                                {/* Shows this only if they are not registered  */}
                                 {canRegister && (
                                     <Link
                                         href={register()}
