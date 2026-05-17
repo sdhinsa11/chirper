@@ -1,27 +1,43 @@
 import Layout from "@/layouts/appLayout";
 import { Head } from "@inertiajs/react";
 
+type Chirp = {
+    author: string;
+    message: string;
+    time: string;
+};
 
-// The children being passed to the layout component is the divs wrapped inside the "Layout" component because they pass children using a special built in prop (children)
-export default function Welcome() {
+type HomeProps = {
+    chirps: Chirp[];
+};
+
+export default function Home({ chirps }: HomeProps) {
     return (
         <>
-            <Head title="Welcome" />
+            <Head title="Home" />
 
             <Layout>
                 <div className="max-w-2xl mx-auto">
-                    <div className="card bg-base-100 shadow mt-8">
-                        <div className="card-body">
-                            <h1 className="text-3xl font-bold">
-                                Welcome to Chirper!
-                            </h1>
+                    {chirps.map((chirp: Chirp, index: number) => (
+                        <div
+                            key={index}
+                            className="card bg-base-100 shadow mt-8"
+                        >
+                            <div className="card-body">
+                                <div className="font-semibold">
+                                    {chirp.author}
+                                </div>
 
-                            <p className="mt-4 text-base-content/60">
-                                This is your brand new Laravel application.
-                                Time to make it sing (or chirp)!
-                            </p>
+                                <div className="mt-1">
+                                    {chirp.message}
+                                </div>
+
+                                <div className="text-sm text-gray-500 mt-2">
+                                    {chirp.time}
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    ))}
                 </div>
             </Layout>
         </>
