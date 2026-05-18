@@ -1,15 +1,21 @@
-import { Head } from '@inertiajs/react';
-import { ReactNode } from 'react';
+import { Link, usePage } from "@inertiajs/react";
+import { ReactNode } from "react";
 
-export default function Layout({ 
-    children, 
-    title = "Chirper" 
-}: { 
-
-    // This means children can be valid react elements and a title needs to be a string
+export default function Layout({
+    children,
+    title = "Chirper",
+}: {
     children: ReactNode;
     title?: string;
 }) {
+    const { auth } = usePage().props as {
+        auth?: {
+            user?: {
+                name: string;
+            } | null;
+        };
+    };
+
     return (
         <div
             data-theme="lofi"
@@ -17,18 +23,37 @@ export default function Layout({
         >
             <nav className="navbar bg-base-100 px-4">
                 <div className="flex w-full items-center justify-between">
-                    <a href="/" className="btn btn-ghost text-xl">
+                    <Link href="/" className="btn btn-ghost text-xl">
                         🐦 Chirper
-                    </a>
+                    </Link>
 
                     <div className="flex gap-2">
-                        <a href="#" className="btn btn-ghost btn-sm">
-                            Sign In
-                        </a>
+                        {auth?.user ? (
+                            <>
+                                <span className="text-sm self-center">
+                                    {auth.user.name}
+                                </span>
 
-                        <a href="#" className="btn btn-primary btn-sm">
-                            Sign Up
-                        </a>
+                                <Link
+                                    href="/logout"
+                                    method="post"
+                                    as="button"
+                                    className="btn btn-ghost btn-sm"
+                                >
+                                    Logout
+                                </Link>
+                            </>
+                        ) : (
+                            <>
+                                <Link href="/login" className="btn btn-ghost btn-sm">
+                                    Sign In
+                                </Link>
+
+                                <Link href="/register" className="btn btn-primary btn-sm">
+                                    Sign Up
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </nav>
@@ -39,7 +64,9 @@ export default function Layout({
 
             <footer className="footer footer-center p-5 bg-base-300 text-base-content text-xs">
                 <div>
-                    <p>© {new Date().getFullYear()} Chirper - Built with Laravel and ❤️</p>
+                    <p>
+                        © 2026 Chirper - Built with Laravel and ❤️
+                    </p>
                 </div>
             </footer>
         </div>

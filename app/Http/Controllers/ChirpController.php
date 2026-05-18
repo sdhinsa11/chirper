@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Gate;
+
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -38,13 +40,24 @@ class ChirpController extends Controller
 
     public function index()
     {
-        $chirps = Chirp::with('user') // grabs the 
+        $chirps = Chirp::with('user')
             ->latest()
-            ->take(50)  // Limit to 50 most recent chirps
-            ->get();
+            ->take(50)
+            ->get()
+            ->map(fn ($chirp) => [
+                'id' => $chirp->id,
+                'message' => $chirp->message,
+                'created_at' => $chirp->created_at,
+                'updated_at' => $chirp->updated_at,
+                'user' => $chirp->user,
+                'can' => [
+                    'update' => auth()->check() && auth()->user()->can('update', $chirp),
+                    'delete' => auth()->check() && auth()->user()->can('delete', $chirp),
+                ],
+            ]);
 
         return Inertia::render('home', [
-            'chirps' => $chirps
+            'chirps' => $chirps,
         ]);
     }
 
@@ -60,21 +73,18 @@ class ChirpController extends Controller
      * Store a newly created resource in storage. ( in this case the resource is a chirp )
      */
     public function store(Request $request)
-        {
-            $validated = $request->validate([
-                'message' => 'required|string|max:255',
-            ], [
-                'message.required' => 'Please write something to chirp!',
-                'message.max' => 'Chirps must be 255 characters or less.',
-            ]);
+    {
+        $validated = $request->validate([
+            'message' => 'required|string|max:255',
+        ], [
+            'message.required' => 'Please write something to chirp!',
+            'message.max' => 'Chirps must be 255 characters or less.',
+        ]);
 
-            \App\Models\Chirp::create([
-                'message' => $validated['message'],
-                'user_id' => null,
-            ]);
+        $request->user()->chirps()->create($validated);
 
-            return redirect('/')->with('success', 'Your chirp has been posted!');
-        }
+        return redirect('/')->with('success', 'Your chirp has been posted!');
+    }
 
     /**
      * Display the specified resource.
@@ -87,24 +97,41 @@ class ChirpController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
+    public function edit(Chirp $chirp)
+    {   
+        Gate::authorize('update', $chirp);
+        // We'll add authorization in lesson 11
+        return Inertia::render('edit', [
+            'chirp' => $chirp,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, Chirp $chirp)
+    {  
+        Gate::authorize('update', $chirp);
+        // Validate
+        $validated = $request->validate([
+            'message' => 'required|string|max:255',
+        ]);
+
+        // Update
+        $chirp->update($validated);
+
+        return redirect('/')->with('success', 'Chirp updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Chirp $chirp)
     {
-        //
+        Gate::authorize('delete', $chirp);
+
+        $chirp->delete();
+
+        return redirect('/')->with('success', 'Chirp deleted!');
     }
 }

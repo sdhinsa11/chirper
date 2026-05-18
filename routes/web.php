@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChirpController;
-use Laravel\Fortify\Features;
+use Illuminate\Support\Facades\Route;
 
 // Route::inertia('/', 'home', [ // ::intertia to load the pages - which is on the homepage route and 'welcome' is the page to render
 //     'canRegister' => Features::enabled(Features::registration()), // the canRegister is a prop being passed to determine if they are registered to show the button or not
@@ -13,12 +12,26 @@ Route::get('/', [ChirpController::class, 'index'])->name('home');
 
 // this middleware is a protection layer - and all routes in this group need to be authenticated and verified when the dashboard page is rendered (second 'dashboard' is the react page and the first is the link to the dashboard)
 // displayed after the user logs in or registers and ensures that the user is authenticated and verified and if the user is not it won't be shown
+// Route::middleware(['auth', 'verified'])->group(function () {
+//     Route::inertia('dashboard', 'dashboard')->name('dashboard');
+// });
+
+
+
+// Route::post('/chirps', [ChirpController::class, 'store'])->name('chirps.store');
+// Route::get('/chirps/{chirp}/edit', [ChirpController::class, 'edit'])->name('chirps.edit');
+// Route::put('/chirps/{chirp}', [ChirpController::class, 'update'])->name('chirps.update');
+// Route::delete('/chirps/{chirp}', [ChirpController::class, 'destroy'])->name('chirps.destroy');
+
+
+Route::get('/', [ChirpController::class, 'index'])->name('home');
+
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::post('/chirps', [ChirpController::class, 'store']);
+    Route::get('/chirps/{chirp}/edit', [ChirpController::class, 'edit']);
+    Route::put('/chirps/{chirp}', [ChirpController::class, 'update']);
+    Route::delete('/chirps/{chirp}', [ChirpController::class, 'destroy']);
 });
 
-
-Route::get('/', [ChirpController::class, 'index']);
-Route::post('/chirps', [ChirpController::class, 'store']);
 
 require __DIR__.'/settings.php';
