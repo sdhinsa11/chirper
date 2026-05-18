@@ -4,31 +4,44 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Chirp;
 
 class ChirpController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     $chirps = [
+    //         [
+    //             'author' => 'Jane Doe',
+    //             'message' => 'Just deployed my first Laravel app! 🚀',
+    //             'time' => '5 minutes ago'
+    //         ],
+    //         [
+    //             'author' => 'John Smith',
+    //             'message' => 'Laravel makes web development fun again!',
+    //             'time' => '1 hour ago'
+    //         ],
+    //         [
+    //             'author' => 'Alice Johnson',
+    //             'message' => 'Working on something cool with Chirper...',
+    //             'time' => '3 hours ago'
+    //         ]
+    //     ];
+
+    //     return Inertia::render('home', [
+    //         'chirps' => $chirps
+    //     ]);
+    // }
+
     public function index()
     {
-        $chirps = [
-            [
-                'author' => 'Jane Doe',
-                'message' => 'Just deployed my first Laravel app! 🚀',
-                'time' => '5 minutes ago'
-            ],
-            [
-                'author' => 'John Smith',
-                'message' => 'Laravel makes web development fun again!',
-                'time' => '1 hour ago'
-            ],
-            [
-                'author' => 'Alice Johnson',
-                'message' => 'Working on something cool with Chirper...',
-                'time' => '3 hours ago'
-            ]
-        ];
+        $chirps = Chirp::with('user') // grabs the 
+            ->latest()
+            ->take(50)  // Limit to 50 most recent chirps
+            ->get();
 
         return Inertia::render('home', [
             'chirps' => $chirps
