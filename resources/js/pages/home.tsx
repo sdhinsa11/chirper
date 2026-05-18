@@ -1,7 +1,6 @@
 import Layout from "@/layouts/appLayout";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import ChirpCard from "@/components/chirp";
-
 
 type Chirp = {
     id: number;
@@ -18,23 +17,60 @@ type HomeProps = {
 };
 
 export default function Home({ chirps }: HomeProps) {
+    const { props } = usePage<{
+        errors: {
+            message?: string;
+        };
+    }>();
+
+    const errors = props.errors || {};
+    const oldMessage = "";
     return (
         <>
             <Head title="Home Feed" />
 
             <Layout>
-                <div className="max-w-2xl mx-auto">
-                    <h1 className="text-3xl font-bold mt-8">
-                        Latest Chirps
-                    </h1>
+                <div className="card bg-base-100 shadow mt-8">
+                    <div className="card-body">
+                        <form method="POST" action="/chirps">
+                            <div className="form-control w-full">
+                                <textarea
+                                    name="message"
+                                    placeholder="What's on your mind?"
+                                    className={`textarea textarea-bordered w-full resize-none ${
+                                        errors.message ? "textarea-error" : ""
+                                    }`}
+                                    rows={4}
+                                    maxLength={255}
+                                    defaultValue={oldMessage}
+                                    required
+                                />
+
+                                {errors.message && (
+                                    <div className="label">
+                                        <span className="label-text-alt text-error">
+                                            {errors.message}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="mt-4 flex items-center justify-end">
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary btn-sm"
+                                >
+                                    Chirp
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
                     <div className="space-y-4 mt-8">
                         {chirps.length > 0 ? (
                             chirps.map((chirp) => (
-                                <ChirpCard
-                                    key={chirp.id}
-                                    chirp={chirp}
-                                />
+                                <ChirpCard key={chirp.id} chirp={chirp} />
                             ))
                         ) : (
                             <div className="hero py-12">
@@ -62,7 +98,6 @@ export default function Home({ chirps }: HomeProps) {
                                 </div>
                             </div>
                         )}
-                    </div>
                 </div>
             </Layout>
         </>
