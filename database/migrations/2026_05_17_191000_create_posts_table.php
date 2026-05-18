@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+        Schema::create('chirps', function (Blueprint $table) {
+            $table->id(); // auto-incrementing ID
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete(); // links each chirp to a user and nullable makes the user_id optional and creates a foreign key constraint which is deleted if the user is deleted
+            $table->string('message', 255); // chirp text 
+            $table->timestamps(); // timestamp of the chirp 
+    });
+}
 
     /**
      * Reverse the migrations.
