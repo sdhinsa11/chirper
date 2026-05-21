@@ -3,10 +3,8 @@ import { ReactNode } from "react";
 
 export default function Layout({
     children,
-    title = "Chirper",
 }: {
     children: ReactNode;
-    title?: string;
 }) {
     const { auth } = usePage().props as {
         auth?: {
@@ -45,11 +43,17 @@ export default function Layout({
                             </>
                         ) : (
                             <>
-                                <Link href="/login" className="btn btn-ghost btn-sm">
+                                <Link
+                                    href="/login"
+                                    className="btn btn-ghost btn-sm"
+                                >
                                     Sign In
                                 </Link>
 
-                                <Link href="/register" className="btn btn-primary btn-sm">
+                                <Link
+                                    href="/register"
+                                    className="btn btn-primary btn-sm"
+                                >
                                     Sign Up
                                 </Link>
                             </>
@@ -63,11 +67,7 @@ export default function Layout({
             </main>
 
             <footer className="footer footer-center p-5 bg-base-300 text-base-content text-xs">
-                <div>
-                    <p>
-                        © 2026 Chirper - Built with Laravel and ❤️
-                    </p>
-                </div>
+                <p>© 2026 Chirper - Built with Laravel and ❤️</p>
             </footer>
         </div>
     );

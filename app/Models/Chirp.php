@@ -15,6 +15,7 @@ class Chirp extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        // A chirp only has one user 
+        return $this->belongsTo(User::class); // connects with the user model 
     }
 }

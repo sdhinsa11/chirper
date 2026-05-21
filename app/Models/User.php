@@ -35,6 +35,7 @@ class User extends Authenticatable
 
     public function chirps(): HasMany
     {   
+        // Users have many chirps 
         return $this->hasMany(Chirp::class);
     }
 }

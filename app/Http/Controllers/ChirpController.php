@@ -40,7 +40,7 @@ class ChirpController extends Controller
 
     public function index()
     {
-        $chirps = Chirp::with('user')
+        $chirps = Chirp::with('user') // this works because of the relationship defined in our chirps model and Chirp:: is accessing the chirps table
             ->latest()
             ->take(50)
             ->get()
@@ -76,9 +76,6 @@ class ChirpController extends Controller
     {
         $validated = $request->validate([
             'message' => 'required|string|max:255',
-        ], [
-            'message.required' => 'Please write something to chirp!',
-            'message.max' => 'Chirps must be 255 characters or less.',
         ]);
 
         $request->user()->chirps()->create($validated);
