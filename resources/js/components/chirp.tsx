@@ -17,6 +17,8 @@ type ChirpProps = {
     };
 };
 
+
+
 export default function ChirpCard({ chirp }: ChirpProps) {
     const handleDelete = () => {
         if (confirm("Are you sure you want to delete this chirp?")) {

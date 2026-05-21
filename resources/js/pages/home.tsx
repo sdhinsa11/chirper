@@ -2,18 +2,25 @@ import Layout from "@/layouts/appLayout";
 import { Head, usePage } from "@inertiajs/react";
 import ChirpCard from "@/components/chirp";
 
+
+// this needs to be consisten across both chirp props
 type Chirp = {
     id: number;
     message: string;
     created_at: string;
+    updated_at: string;
     user?: {
         name: string;
         email: string;
     } | null;
+    can: {
+        update: boolean;
+        delete: boolean;
+    };
 };
 
 type HomeProps = {
-    chirps: Chirp[];
+    chirps: Chirp[]; // a list of chirps to pass through the home page 
 };
 
 export default function Home({ chirps }: HomeProps) {
