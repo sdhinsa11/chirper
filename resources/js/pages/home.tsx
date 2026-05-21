@@ -37,6 +37,8 @@ export default function Home({ chirps }: HomeProps) {
             <Head title="Home Feed" />
 
             <Layout>
+
+                {/* Submit a chirp */}
                 <div className="card bg-base-100 shadow mt-8">
                     <div className="card-body">
                         <form method="POST" action="/chirps">
@@ -73,6 +75,8 @@ export default function Home({ chirps }: HomeProps) {
                         </form>
                     </div>
                 </div>
+
+                {/* Display the chirps */}
 
                     <div className="space-y-4 mt-8">
                         {chirps.length > 0 ? (

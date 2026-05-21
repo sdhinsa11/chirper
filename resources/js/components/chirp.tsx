@@ -70,7 +70,9 @@ export default function ChirpCard({ chirp }: ChirpProps) {
                                     </>
                                 )}
                             </div>
+                            
 
+                            {/* goes to the edit link if they can edit it */}
                             {(chirp.can.update || chirp.can.delete) && (
                                 <div className="flex gap-1">
                                     {chirp.can.update && (

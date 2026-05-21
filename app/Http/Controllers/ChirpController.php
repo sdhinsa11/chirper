@@ -78,6 +78,7 @@ class ChirpController extends Controller
             'message' => 'required|string|max:255',
         ]);
 
+        // request-> gets the current authenticated user then goes to the chirps and creates a new chirp using the validated data and the user_id using the relationship we define in the model
         $request->user()->chirps()->create($validated);
 
         return redirect('/')->with('success', 'Your chirp has been posted!');
@@ -96,8 +97,7 @@ class ChirpController extends Controller
      */
     public function edit(Chirp $chirp)
     {   
-        Gate::authorize('update', $chirp);
-        // We'll add authorization in lesson 11
+        Gate::authorize('update', $chirp); // uses the ChirpPolicy to decide if the user can delete this
         return Inertia::render('edit', [
             'chirp' => $chirp,
         ]);
@@ -108,7 +108,7 @@ class ChirpController extends Controller
      */
     public function update(Request $request, Chirp $chirp)
     {  
-        Gate::authorize('update', $chirp);
+        Gate::authorize('update', $chirp); // uses the ChirpPolicy to decide if the user can edit this
         // Validate
         $validated = $request->validate([
             'message' => 'required|string|max:255',
@@ -125,7 +125,7 @@ class ChirpController extends Controller
      */
     public function destroy(Chirp $chirp)
     {
-        Gate::authorize('delete', $chirp);
+        Gate::authorize('delete', $chirp); // uses the ChirpPolicy to decide if the user can delete this
 
         $chirp->delete();
 
